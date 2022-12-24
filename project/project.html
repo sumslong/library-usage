@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accessibility and usage of libraries in Chicago</title>
+    <link href="https://fonts.googleapis.com/css?family=Work+Sans:300,400,700" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+    <h1>Accessibility and Usage of Libraries in Chicago</h1>
+    <h2>Overview: Public Library System in Chicago</h2>
+    <p>
+        There are 81 public libraries in the city of Chicago. These libraries have a plethora of resources available for checkout such as cds, books, movies, and music. Furthermore, they provide free Wi-Fi connection, desktop computer access, printer access and professional development workshops.
+    </p>
+    <p>
+        Public libraries can provide support for community members in the face of inequity. I was inspired by <a href=”https://themarkup.org/still-loading/2022/10/19/dollars-to-megabits-you-may-be-paying-400-times-as-much-as-your-neighbor-for-internet-service">this</a> piece by The Markup and its various visualizations depicting how Internet Service Providers provide slower internet speeds in traditionally redlined areas for the same price as faster speeds in traditionally highly-rated areas. In one instance, $55 would get one household a download speed of 300 mbps, while another household just .4 miles away would get a download speed of 5 mbps. <a href="https://athelp.sfsu.edu/hc/en-us/articles/360050514614-Internet-speed-and-bandwidth">Universities</a> and <a href="https://www.highspeedinternet.com/resources/zoom-guide">tech resources</a> both recommend 25 mbps for a smooth connection on Zoom for one person. Examining a household with 2 adults and one child, the strain on bandwidth can be immense.
+    </p>
+    <p>
+        I have firsthand experience of the importance of the accessibility of a public library. Growing up without internet or a computer for months at a time, it became a challenge when I would be assigned papers that had to be typed, printed out, and turned in. I did not have access to the internet because my family could not afford the technical support that was frequently necessary due to the age of the home. I would see students from my high school that were in the same position as myself: the school’s library closed a little too soon after school was out, not allowing much room for work to get done.  These factors sparked my curiosity of exploring the usage of libraries—and more specifically, the computers—based on the income of the library’s zip code. Since I had never lived in a high-income zip code, I entered with an open mind: people could use the library and its computers to avoid using their personal computers or to move into an office-like environment that motivates them. 
+    </p>
+    <h2>Methodology: Data Selection and Cleaning</h2>
+    <p>
+        I set out to explore the accessibility of public libraries within Chicago, where I currently study. I chose to evaluate library accessibility based on zip code since it can be a good geographic measure of if a library is close enough via CTA or car. Furthermore, zip codes are evaluated by the Census Bureau on metrics such as population and median household income, which provide ways to evaluate accessibility relative to income and population
+    </p>
+    <p>
+        In total, I utilized 3 primary data sources and a few supplementary sources to fill in gaps. The first primary dataset I chose was <a href=”https://data.cityofchicago.org/Education/Libraries-2022-Visitors-by-Location/ykhx-yxn9”>“Libraries - 2022 Visitors by Location”</a> via the Chicago Data Portal. This dataset contains the number of visits up to September 2022 at the time of download per month, as well as the library’s identifying information (branch name, zip code, address, location). The second primary dataset I chose was <a href=”https://data.cityofchicago.org/Education/Libraries-2022-Computer-Sessions-by-Location/26kv-zc52”>”Libraries - 2022 Computer Sessions by Location”</a> via the Chicago Data Portal. This dataset contains the number of computer sessions up to August 2022 at the time of download per month, as well as the same identifying information as the sessions data. One thing to note is that visits that were only for the library’s programming were excluded, meaning that this data contains people who came to the library to utilize a specific resource. The final primary dataset I used contains summary data from the <a href=”https://www.point2homes.com/US/Neighborhood/IL/Chicago-Demographics.html”>2020 Census</a> via point2homes. This dataset contains zip codes, their population, and their median income.  
+    </p>
+    <p>
+        I used Pandas in Python to clean the datasets. In cleaning the dataset to prepare for the visualization, I had a few key considerations in mind. I identified that linking median household income and population to the zip code the library resided in was important. Furthermore, I needed to consolidate sessions and visits onto one csv so that rates could be computed. I cleaned the three primary datasets so that the types of data were compatible with one another for computation and graphing. 
+    </p>
+    <p>
+        The cleaning of the sessions and visitors data was relatively straightforward. In the visitors data, I subtracted the September visitors from the “year to date” total so that the datasets reflected the same time period. After that, I dropped each month from both datasets since I was only investigating the year as a whole. I chose to keep the columns in the sessions that identified the library, and dropped the duplicative columns in the visitors data. In order to join, I kept the location as it was the least prone to syntactical errors (such as commas, spacing, or shorthand to refer to a particular branch) as well as avoiding confusion with a zip code join between the two.
+    </p>
+    <p>
+        The income data was not originally a csv but instead space-separated, so I had to use regex to make it comma-separated by first deleting the commas from the population and then replacing the remaining spaces with commas. I removed the “$” in the income columns so that JavaScript recognizes the income values as an integer. After doing this, I added a “Income Bracket” column with categorical values to simplify counting and creating ledgers. Since two zip codes were missing (60827 and 60707) from the master list, I consulted supplementary information from the Census Bureau hosted through Illinois Demographics for <a href=”https://www.illinois-demographics.com/60827-demographics”>60827</a> and <a href=”https://www.illinois-demographics.com/60707-demographics”>60707</a>.
+    </p>
+    <p>
+        When compiling the final, consolidated csv, I began by joining the income data with the computer sessions data on zip code. Since each row is a library, each library now has the median income and population of its zip code. Then, I joined the visitors data on the new sessions-income data on location, since there were some syntactic differences in how the libraries’ names were spelled. After the join, I decided to clean the location values with regex to make them more recognizable for the projection. In the end, I ended up computing the rate computer sessions were used by the population, as well as the rate computer sessions were used by the number of visitors. 
+    </p>
+    <h1>Where, Who, and What?</h1>
+    <h2>Where Are Chicago's Libraries?</h2>
+    <p>
+        <b>Libraries visually appear relatively accessible, with some gaps</b>
+    </p>
+            <div id="legend"></div>
+            <div id="choropleth"></div>
+        </div>
+        </div>
+        <p> 
+            This data visualization depicts the median household income of zip codes within Chicago with libraries plotted on top. This allows an examination of the geographic accessibility of libraries based on where one resides in Chicago. At a glance, it seems that libraries are well dispersed in Chicago. However, there are a few areas where this is not the case.
+        </p>
+        <p>
+            There are numerous zip codes towards downtown with no library branch, but these are relatively small areas and the largest branch (Harold Washington Library) serves this general area. Looking towards the southern portion of Chicago, it seems like there are areas with service gaps. For instance, it visually appears that 60653 has poor library accessibility—there are a few on the border, but not within it. The area around 60620, 60619, 60617, and 60628 have a large service gap.
+        </p>
+        <p>
+            One key thing to note is that this map does not take population into account. One could argue that zip codes with less population have less libraries. 
+        </p>
+        <h2>Who Has Access to a Library?</h2>
+        <p>
+            <b>About 129,000 Chicagoans do not have a library in their zip code</b>
+        </p>
+        <div class="parent">
+            <p>
+                Zip code Population Distribution vs. Library Access Distribution
+            </p>
+            <div id="zipcodeBar" class="child"></div>
+            <div id="libraryBar" class="child"></div>
+        </div>
+        <p>
+            Another way to evaluate library accessibility is by whether or not a person in a particular income bracket has a library in their zip code. Every resident living in Chicago in the $20k, $40k, $60k, and $80k income brackets has at least one library in their zip code. Conversely, there are gaps in the $30k, $50k, $70k, and $90k+ income brackets — with the most significant gaps in the $90k+ bracket (56% of those without) and $30k bracket (26% of those without). 
+        </p>
+        <p>
+            I believe that the majority of the $90k income bracket’s access gap is due to the large population density and the proximity to the largest library, Harold Washington. However, a similar explanation does not exist for the $30k income bracket. Population within zip code does not appear to be a major determinant of whether or not a library exists, given that the largest discrepancy is within the $90k income bracket. Conversely, it is hard to conclude that population density is a determinant either, given the geographic observation in the southern portion of Chicagoland and the bar charts.
+        </p>
+        <h2>What Is The Library Used For?</h2>
+        <div id="visitsCluster">
+            <p>
+                <b>Higher income areas saw more visits per person at the library</b> 
+                </p>
+         
+        </div>
+        <p>
+            It is demonstrated above that tourism, hubs of occupations, and lack of accessibility to a library within one's own zip code are potential confounders. Looking to the cluster of $90k+ median household income zip codes in the downtown area without their own library, there is an expectation that one library is servicing multiple zip codes. Furthermore, since downtown Chicago receives a large amount of out-of-city traffic every year, the proportion of visits to zip code population is inflated. 
+        </p>
+        <div id="sessionsCluster">
+            <p>
+                <b>The computer sessions per person rate has no clear correlation</b> 
+                </p>
+        </div>
+    </div>
+        <p>
+           I believe that this is a product of two factors working simutaneously. Firstly, lower income areas are seeing fewer raw number of visits per person, so therefore they are seeing less computer sessions per person. Secondly, when people go to the library in higher income areas, they are more likely going for the material resources that the library provides than the computers. Both factors together creates similar computer usage rates.
+        </p>
+
+        <div id="svCluster">
+            <b>However, residents in lower income zip codes are more likely to use a computer during a visit</b>
+        </div>
+        <p>
+            To account for this, normalizing the number of computer sessions by the number of visitors in a library mitigates confounding variables of tourism and neighboring citizens visiting the library. Visually, it appears that residents in lower income areas are more likely to use a computer when they do visit their local library.  
+        </p>
+        <div id="visitsScatterplot">
+            <b>Computer usage during a given visit is negatively correlated with income of zip code</b>
+        </div>
+        <h1>Conclusion</h1>
+        <p>
+            There seems to be a service gap geographically within higher income zip codes, which can be explained by the lesser square mileage. However, a similar service gap exists in the southern portion of Chicago which cannot be explained by population density.
+        </p>
+        <p>
+            Overall, there is a correlation between the number of visits a library gets and its income level, when normalizing by the population of the zip code. It is unclear how much of this is attributed to the income of the zip code itself, as there are numerous confounding factors such as lack of libraries in neighboring zip codes as well as the proximity to hubs of tourism.
+        </p>
+        <p>
+            There is no correlation between the number of computer sessions and its income level, when normalizing by the population. This itself is an interesting conclusion that merited further exploration. One would expect to see a correlation that is similar to the visit correlation due to the necessity of visits for computer sessions to occur in the first place.
+        </p>
+        <p>
+            When normalized by the number of visits, there is a clear correlation between the median household of a zip code and how much the computer is utilized. 
+        </p>
+        <p>
+            While tourism, population density, and geopgraphic spacialness of zip codes have been examined, there are a few factors left unaddressed by the data used in this analysis. For instance, the data captured does not contain counts of the number of computers in a library, which may skew the computer sessions per visit rate. It could be that some libraries do not have enough computers to accommodate the number of people who wish to use a computer. 
+        </p>
+        <p>
+            Furthermore, the attitudes of residents surrounding their engagement with their library branch is not captured. Questions pertaining to if guests feel safe going to their library or fully understand the resources offered are not addressed. Deeper analysis regarding library accessibility and usage should address these. 
+        </p>
+        <h1>Code citations</h1>
+        <p>
+            Code referenced from <a href="https://tiffanyfrance.com/CAPP30239_FA22/">Tiffany France's Autumn 2022 Class</a>, <a href="https://observablehq.com/@michaeltranxd/choropleth-map-of-chicago">Observable</a>, and <a href="https://dev.to/dawnind/3-ways-to-display-two-divs-side-by-side-3d8b#:~:text=The%20most%20common%20way%20to,using%20inline%2Dblock%20css%20property.&text=The%20inline%2Dblock%20property%20on,like%20an%20inline%20element%20does.">Mainak Das</a>.       
+         </p>
+
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="d3-color-legend.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+    <script src="choropleth_with_point.js"></script>
+    <script src="library_distribution_barchart.js"></script>    
+    <script src="zipcode_distribution_barchart.js"></script>        
+    <script src="2022_visits_session_scatterplot.js"></script>
+    <script src="visits_cluster.js"></script> 
+    <script src="sessions_only_cluster.js"></script>
+    <script src="cluster.js"></script>
+    <script src="https://unpkg.com/simple-statistics@7.8.0/dist/simple-statistics.min.js"></script>
+    <script src="https://rawgit.com/susielu/d3-annotation/master/d3-annotation.min.js"></script>
+    <script>choropleth();</script>
+    <script>visitsScatterplot();</script>
+    <script>visitCluster();</script>
+    <script>sessionCluster();</script>
+    <script>cluster();</script>
+</body>
