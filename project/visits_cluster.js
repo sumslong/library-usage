@@ -8,7 +8,7 @@ function visitCluster() {
       .attr("width", width)
       .attr("height", height);
     
-    d3.csv("sessions_visits_income_2022.csv").then(data => {
+    d3.csv("data/sessions_visits_income_2022.csv").then(data => {
     
       let rScale = d3.scaleLinear()
         .range([0, 250])
