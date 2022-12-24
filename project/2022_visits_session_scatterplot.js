@@ -8,7 +8,7 @@ const svg = d3.select("#visitsScatterplot")
     .append("svg")
     .attr("viewBox", [0, 0, w2, h2]);
 
-d3.csv('sessions_visits_income_2022.csv').then(data => {
+d3.csv('data/sessions_visits_income_2022.csv').then(data => {
   for (let d of data) {
     d.MedianIncome = +d.MedianIncome
     d.SessionVisitRate = +d.SessionVisitRate
