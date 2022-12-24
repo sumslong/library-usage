@@ -1,4 +1,4 @@
-d3.csv("census_chicago_income.csv").then(data => {
+d3.csv("data/census_chicago_income.csv").then(data => {
 
     let incomebrackets = [
         { bracket: "> $20k", count: 0 },
