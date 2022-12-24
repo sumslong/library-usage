@@ -13,9 +13,9 @@ const svg = d3.select("#choropleth")
   .attr("viewBox", [0, 0, width, height]);
 
 Promise.all([
-  d3.csv("census_chicago_income.csv"),
-  d3.json("chicago.json"),
-  d3.csv("sessions_visits_income_2022.csv")
+  d3.csv("data/census_chicago_income.csv"),
+  d3.json("libs/chicago.json"),
+  d3.csv("data/sessions_visits_income_2022.csv")
 ]).then(([data, chicago, sesvisin]) => {
   const dataByZipcode = {};
 
