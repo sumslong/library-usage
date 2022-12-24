@@ -1,4 +1,4 @@
-d3.csv("sessions_visits_income_2022.csv").then(data => {
+d3.csv("data/sessions_visits_income_2022.csv").then(data => {
 
     let incomebrackets = [
         { bracket: "> $20k", count: 0 },
