@@ -16,4 +16,4 @@ The main takeaways:
 
 Data from City of Chicago Data Portal and the Census Bureau.
 
-This project is built in CSS, HTML, and JavaScript (d3.js). Python (Pandas) was used to clean the datasets. It was completed in satisfaction of requirements for CAPP 30239 - Data Visualization for Policy Analysis at the University of Chicago.
+This project is built in CSS, HTML, and JavaScript (d3.js). Python (Pandas) was used to clean and merge the datasets. It was completed in satisfaction of requirements for CAPP 30239 - Data Visualization for Policy Analysis at the University of Chicago.
